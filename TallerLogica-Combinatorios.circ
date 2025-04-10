@@ -604,8 +604,7 @@
       <a name="size" val="30"/>
       <a name="width" val="4"/>
     </comp>
-    <comp lib="1" loc="(320,340)" name="XOR Gate">
-      <a name="size" val="30"/>
+    <comp lib="1" loc="(330,350)" name="OR Gate">
       <a name="width" val="4"/>
     </comp>
     <comp lib="1" loc="(440,260)" name="NOT Gate">
@@ -657,10 +656,13 @@
     <wire from="(260,240)" to="(280,240)"/>
     <wire from="(270,180)" to="(270,230)"/>
     <wire from="(270,230)" to="(280,230)"/>
+    <wire from="(280,350)" to="(280,370)"/>
     <wire from="(310,300)" to="(330,300)"/>
-    <wire from="(320,340)" to="(400,340)"/>
     <wire from="(330,300)" to="(330,320)"/>
     <wire from="(330,320)" to="(410,320)"/>
+    <wire from="(330,350)" to="(340,350)"/>
+    <wire from="(340,340)" to="(340,350)"/>
+    <wire from="(340,340)" to="(400,340)"/>
     <wire from="(380,130)" to="(400,130)"/>
     <wire from="(380,160)" to="(420,160)"/>
     <wire from="(380,170)" to="(450,170)"/>
