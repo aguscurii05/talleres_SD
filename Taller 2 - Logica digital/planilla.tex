@@ -1,0 +1,203 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{amssymb, amsmath}
+\usepackage[a4paper, margin={.3in}]{geometry}
+\title{}
+\author{}
+\date{}
+\renewcommand{\theenumi}{\alph{enumi}}
+\begin{document}
+\maketitle
+
+\section{Ejercicios}
+
+\subsection{\textbf{Componentes de 3 estados}}
+\begin{enumerate}
+    \item Completar la siguiente tabla:
+    \begin{center}
+        \begin{tabular}{c c c c c c|c|c}
+            $A$ & $A_en$ & $B$ & $B_en$ & $C$ &$C_en$ & $Estimado$ & $Obtenido$ \\\hline
+            0 & 0 & 0 & 0 & 0 & 0 & a & a \\
+            0 & 1 & 1 & 1 & 0 & 0 & a & a \\
+            1 & 0 & 1 & 0 & 1 & 0 & a & a \\
+            1 & 1 & 1 & 0 & 1 & 1 & a & a \\
+            0 & 1 & 0 & 1 & 0 & 1 & a & a \\
+            0 & 1 & 1 & 1 & 1 & 1 & a & a \\
+            1 & 0 & 1 & 1 & 1 & 0 & a & a \\
+        \end{tabular}
+    \end{center}
+    \item Completar la siguiente tabla:
+    \begin{center}{
+        \renewcommand{\arraystretch}{1.5}
+        \begin{tabular}{c | c}
+            Color & Interpretación \\ \hline
+            Gris & El cable no esta definido\\ 
+            Verde Claro & Representa al bit 1 \\
+            Verde Oscuro & Representa al bit 0\\
+            Azul & Esta conectado pero no definido\\
+            Rojo & Hay conflito de bits\\
+        \end{tabular}}
+    \end{center}
+    \item Enunciar la regla:\\\\
+    Para no tener conflictos de bits no debemos activar al mismo tiempo variables de control que dejen pasar dos datos distintos.\\
+    \item Explicar cuales son y por que:
+\end{enumerate}
+\subsection{\textbf{Transferencia entre registros:}}
+\begin{enumerate}
+    \item Detallar entradas y salidas:
+    \begin{center}{\renewcommand{\arraystretch}{1.5}
+        \begin{tabular}{p{3.5cm} | c | c |p{9cm} }
+            Nombre &Entrada/Salida & Control si/no & Descripcion \\ \hline
+            Clk & Entrada & No & Representa el valor a alamacenar en los flip-flop D\\
+            $Force_{input}$ & Entrada & Si & Habilita el almacenado de valores en los 3 flip-flop D\\
+            $W_i (i\in 1,2,3)$ & Entrada & Si & Habilita el almacenado de valores en el i-esimo flip-flop D\\
+            Entradas conectadas al input $en_{out}$ & Entrada & Si & Habilitan la salida del valor almacenado en el flip-flop D correspondiente\\
+            en\_force\_input & Entrada & Si & Regula el paso del valor que entra en force\_input \\
+            $R_i (i\in 0,1,2)$ & Salida & No & Representan los valores almacenados en cada uno de los flip-flop D\\
+            Salida General & Salida & No & n el caso de que no haya error devuelve los valores almacenados en el/los $R_i$ y/o en el force\_input\\
+        \end{tabular}}
+    \end{center}
+    \item Secuencia de señales:\\\\
+    Force\_Input (1) $\rightarrow$ en\_Force\_input (1) $\rightarrow$  $w_1$ (1) $\rightarrow$ clk (1)\\\\
+
+    En caso de que se desee alterar componendes, esta es la secuencia de pasos para no modifique a “registro\_1”:\\
+    $w_i$ (0). (deshabilitamos el write en R1)
+
+    \item Secuencia de señales:\\\\
+    
+    en\_force\_input (1) (no nos importa el valor que tenga “Force\_input” previamente (0 o 1) $\rightarrow$\\
+    $w_0$ (1)$\rightarrow$\\
+    clk (1) $\rightarrow$\\
+    clk (0) $\rightarrow$\\
+    en\_Force\_input (0) $\rightarrow$\\
+    en\_out (1) (en “r\_0”) $\rightarrow$\\
+    $w_1$ (1)  $\rightarrow$\\
+    clk (1) $\rightarrow$\\
+    clk (0) $\rightarrow$\\
+    en\_out (en “R\_0”) (0) $\rightarrow$\\
+    $w_1$ (0) $\rightarrow$\\
+    en\_out (en “R\_1”) (0) $\rightarrow$\\
+    en\_out (en “R\_0”) (0) $\rightarrow$\\
+    en\_out (en “R\_2”) (1) $\rightarrow$\\
+    clk (1) $\rightarrow$\\ clk (0) $\rightarrow$\\
+    $w_0$ (0) $\rightarrow$\\
+    $w_1$ (1) $\rightarrow$\\
+    en\_out (en “R\_2”) (0) $\rightarrow$\\
+    en\_out (en “R\_1”) (1)$\rightarrow$\\
+    $w_2$ (1) $\rightarrow$\\
+    clk (1) $\rightarrow$\\
+    clk (0)
+\end{enumerate}
+\newpage
+\subsection{\textbf{Maquina de 4 registros con suma y resta}}
+\begin{enumerate}
+    \item Detallar entradas y salidas:
+    \begin{center}{\renewcommand{\arraystretch}{1.5}
+        \begin{tabular}{p{3.5cm} | c | c |p{9cm} }
+            Nombre &Entrada/Salida & Control si/no & Descripcion \\ \hline
+            Force\_input & Entrada & No &  Ingresa el valor que queremos almacenar en alguna de las memorias\\
+            en\_force\_input & Entrada & Si & Habilita o no el paso del valor de Force\_input \\
+            $Reg_i\_Write$ $(i \in 0,1,2, 3)$ & Entrada & Si & Permite o no en cada memoria el guardado de un valor\\
+            $Reg_i\_enableOut$ $(i \in 0,1,2, 3)$ & Entrada & Si & Permite o no  la salida del valor almacenado en cada memoria\\
+            ALU\_N\_Write  $(N \in (A,B))$ & Entrada & Si & Permite o no almacenar el valor de un registro (o varios con el mismo valor) en la ALU\\
+            OP & Entrada & Si & Indica a la ALU que operacion realizar entre +,- ,and, or\\
+            ALU\_enableOut & Entrada & Si & Permite la salida del valor resultante de la operacion realizada por la ALU\\
+            Clk & Entrada & Si & Prmite almacenar valores en los registros y realizar operaciones en la ALU, al oscilar entre 0 y 1. Tambien de regular las salidas de los registros y la ALU al cambiar de valor\\
+            N\_debug  $(N \in (A,B))$ &Salida & No & Permite ver en todo momento el valor almacenado en las entradas correspondientes al valor a o b de la ALU\\
+            S\_debug & Salida & No & Permite ver en todo momento el resultado de la operacion realizada por la ALU\\
+            N & Salida & No & Indica si el resultado de la operacion de la ALU fue negativo en complemento a 2\\
+            Z & Salida & No & Indica si el resultado de la operacion de la ALU fue 0\\
+            V & Salida & No & Indica si el resultado de la operacion de la ALU tuvo overflow en la suma interpretada en complemento a 2 (0 sino)\\
+            C & Salida & No & Indica si el resultado de la operacion de la ALU tuvo carry en la suma y la resta (0 sino)\\
+        \end{tabular}}
+    \end{center}
+    \item Detallar el contenido de cada display:
+    \begin{center}{\renewcommand{\arraystretch}{1.5}
+        \begin{tabular}{p{6cm} | p{9cm} }
+            Display & Descripcion \\ \hline
+            Reg4\_debug (display de cada registro) & Permite ver en todo momento el valor almacenado en un registro\\
+            Display inferior & Esta conectado a un cable que contiene el valor tanto del resultado de la operacion de la ALU, como de la entrada force\_input, por lo que siempre que no haya conflicto con valores, nos lo mostrara.\\
+        \end{tabular}}
+    \end{center}
+    \item Secuencia de señales:\\\\
+    
+    Primero de todo suponemos todos los valores seteados a 0. Dicho esto, a continuacion la secuencia:\\\\
+    Seteamos (0100) en Force\_input $\rightarrow$\\
+     en\_Force\_input (1) $\rightarrow$\\
+    Reg2\_write (1) $\rightarrow$\\
+    clk (1) $\rightarrow$\\ clk0 $\rightarrow$\\
+    Reg2\_write (0) $\rightarrow$\\
+    Seteamos (1101) en Force\_input $\rightarrow$\\
+    Reg3\_write (1) $\rightarrow$\\
+    clk (1) $\rightarrow$\\
+    clk (0)
+    \item Completar la siguiente tabla:
+    \begin{center}{\renewcommand{\arraystretch}{1.5}
+        \begin{tabular}{c || c | c || c | c }
+            Valor Inicial & Resultado op 1 & Flags & Resultado op 1 & Flags \\ \hline
+            (4,0) & 4 en ambas interpretaciones & N=0, Z=0, V=0, C=0& 4 en ambas interpretaciones & N=0, Z=0, V=0, C=0 \\
+            (7,-1) & 8 en sin signo y -8 en complemento a 2& N=1, Z=0, V=1, C=1& 7 en ambas interpretaciones & N=0, Z=0, V=0, C=0\\
+            (-8,-2) & 6 en ambas interpretaciones & N=0, Z=0, V=1, C=1 &10 en sin signo y -6 en complemento a 2 &        
+            N=1, Z=0, V=1, C=1 \\
+            (8,-9)* & N/A & N/A & N/A & N/A\\
+        \end{tabular}}
+    \end{center}
+    *No se pueden realizar operaciones con estos valores, pues -9 no se puede escribir en complemento a 2 ya que este funciona en el rango [7,-8]\\
+
+    Veamos a continuacion la secuencia de operaciones para almacenar en R2 y R3 los resultados de OR y sub con (4,0) como valores:
+
+    Seteamos (0100) en force\_input $\rightarrow$\\
+    en\_force\_input(1) $\rightarrow$\\
+    Reg0\_write(1)$\rightarrow$\\
+    clk(1)$\rightarrow$\\
+    clk(0)$\rightarrow$\\
+    Reg0\_write(0) $\rightarrow$\\
+    Seteamos (0000) en force\_input $\rightarrow$\\
+    Reg1\_write(1)$\rightarrow$\\
+    clk(1)$\rightarrow$\\
+    clk(0)$\rightarrow$\\
+    Reg1\_write(0)$\rightarrow$\\
+    ALU\_A\_Write(1)$\rightarrow$\\
+    Reg0\_enable\_out(1)$\rightarrow$\\
+    clk(1)$\rightarrow$\\
+    clk(0)$\rightarrow$\\
+    Reg0\_enable\_out(0) $\rightarrow$\\
+    ALU\_A\_Write(0)$\rightarrow$\\
+    ALU\_B\_Write(1)$\rightarrow$\\
+    Reg1\_enable\_out(1)$\rightarrow$\\
+    clk(1)$\rightarrow$\\ clk(0)$\rightarrow$\\
+    Reg1\_enable\_out(0)$\rightarrow$\\
+    ALU\_B\_Write(0)$\rightarrow$\\
+    op 11 $\rightarrow$\\
+    clk(1)$\rightarrow$\\
+    clk(0)$\rightarrow$\\
+    en\_force\_input(0) $\rightarrow$\\
+    ALU\_enable\_out(1)$\rightarrow$\\
+    Reg2\_write(1)$\rightarrow$\\
+    clk(1)$\rightarrow$\\
+    clk(0)$\rightarrow$\\
+    Reg2\_write(0)$\rightarrow$\\
+    op 01 $\rightarrow$\\
+    clk(1)$\rightarrow$\\
+    clk(0)$\rightarrow$\\
+    ALU\_enable\_out(1)$\rightarrow$\\
+    Reg3\_write(1)$\rightarrow$\\
+    clk(1)$\rightarrow$\\
+    clk(0)$\rightarrow$\\
+    Reg3\_write(0)
+
+    \item Explicar\\\\
+    Se niega la salida del clock para que en el mismo ciclo de encendido y apagado la ALU realice la operacion (clk 1) y el registro\_4bytes devuelva el resultado (clk 0, interpretado como 1 por el registro), bajando el tiempo de respuesta del componente, ya que si dicho NOT no estuviera negando al clk, entonces se neceseterian dos ciclos del mismo para cargar dos valores (suponiendo write 1 en ambos) y devolver el resultado.
+\end{enumerate}
+
+\section{\textbf{Correccion}}
+
+Integrantes:
+
+\begin{itemize}
+    \item Nombre y apellido: Agustin Stescovich Curi LU: 184/24
+    \item Nombre y apellido: Franco Nahuel Chazarreta Villagra LU: 669/24
+    \item Nombre y apellido: Jasson Aldayr, Davila Bustamante LU: 59/22
+
+\end{itemize}
+\end{document}  
