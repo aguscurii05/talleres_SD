@@ -2,9 +2,9 @@
 \usepackage{graphicx} % Required for inserting images
 \usepackage{amssymb, amsmath}
 \usepackage[a4paper, margin={.3in}]{geometry}
-\title{}
-\author{}
-\date{}
+\title{Taller de Logica Digital- Parte 2}
+
+
 \renewcommand{\theenumi}{\alph{enumi}}
 \begin{document}
 \maketitle
@@ -40,7 +40,8 @@
     \end{center}
     \item Enunciar la regla:\\\\
     Para no tener conflictos de bits no debemos activar al mismo tiempo variables de control que dejen pasar dos datos distintos.\\
-    \item Explicar cuales son y por que:
+    \item Explicar cuales son y por que:\\\\
+    Los casos basuras son aquellos donde un cable o algo (entrada, salida, componente, etc) que espera recibir solo un valor obtiene dos distintos, por lo que no se puede extraer ningun resultado
 \end{enumerate}
 \subsection{\textbf{Transferencia entre registros:}}
 \begin{enumerate}
@@ -133,8 +134,8 @@
     clk (0)
     \item Completar la siguiente tabla:
     \begin{center}{\renewcommand{\arraystretch}{1.5}
-        \begin{tabular}{c || c | c || c | c }
-            Valor Inicial & Resultado op 1 & Flags & Resultado op 1 & Flags \\ \hline
+        \begin{tabular}{c || p{3.5cm} | c || p{4cm} | c }
+            Valor Inicial & Resultado op 1 & Flags & Resultado op 2 & Flags \\ \hline
             (4,0) & 4 en ambas interpretaciones & N=0, Z=0, V=0, C=0& 4 en ambas interpretaciones & N=0, Z=0, V=0, C=0 \\
             (7,-1) & 8 en sin signo y -8 en complemento a 2& N=1, Z=0, V=1, C=1& 7 en ambas interpretaciones & N=0, Z=0, V=0, C=0\\
             (-8,-2) & 6 en ambas interpretaciones & N=0, Z=0, V=1, C=1 &10 en sin signo y -6 en complemento a 2 &        
