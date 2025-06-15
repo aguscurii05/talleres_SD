@@ -1,33 +1,35 @@
+.data
+
+test1: .byte 3,5,7,9,11,13
+long1: .word 6
+
+test2: .byte 1,2,4,8,16,32
+long2: .word 6
+
+test3: .byte 3,7,6,1,0,8,6
+long3: .word 7
+.text
 main:
-
 #test1
-li a0 0x0fffff40
-li a1 10
-li a2 1
-li a3 1
-li a4 1
-jal ra cargarArray
-
-li t0 0x0fffff40
-li t1 10
+la t0 test1
+lw t1 long1
 jal ra potEnArr
-li s1 4
-bne s1 a0 falla
+bnez a0 falla
 
 #test2
-
-li a0 0x0fffff40
-li a1 20
-li a2 1
-li a3 1
-li a4 1
-jal ra cargarArray
-
-li t0 0x0fffff40
-li t1 20
+la t0 test2
+lw t1 long2
 jal ra potEnArr
-li s1 5
+lw s1 long2
 bne s1 a0 falla
+
+#test3
+la t0 test3
+lw t1 long3
+jal ra potEnArr
+li s1 2
+bne s1 a0 falla
+
 li s2 1
 j fin
 falla:
@@ -37,42 +39,6 @@ j fin
 fin: j fin
 
 #------------------------------------------
- 
-cargarArray:
-
-#almaceno los valores que no quiero modificar
-addi sp, sp -32 
-sw ra, (0)sp
-sw s0, (4)sp
-sw s1, (8)sp
-sw s2, (12)sp
-sw s3, (16)sp
-sw s4, (20)sp
-
-mv s0 a0 #puntero
-mv s1 a1 #longitud
-mv s2 a2 #inicio
-mv s3 a3 #iterador
-mv s4 a4 #variacion
-
-whileCA:
-bgt s3 s1 finCA
-sb s2 0(s0)          #lo cargo en posicion
-add s2 s2 s4         #le sumo la variacion
-addi s0 s0 1         #actualizo el puntero
-addi s3 s3 1         #actualizo el iterador
-j whileCA
-finCA:
-lw ra, (0)sp
-lw s0, (4)sp
-lw s1, (8)sp
-lw s2, (12)sp
-lw s3, (16)sp
-lw s4, (20)sp
-addi sp, sp -32 
-ret
-
-#-------------------------------------------
 
 esPot2: 
 
@@ -104,7 +70,7 @@ addi sp sp 16
 ret
 
 #--------------------------------------------
-potEnArr: #tomo a0=puntero, a1=long
+potEnArr: #tomo t0=puntero, t1=long
 
 #almaceno en el stack las posiciones que NO quiero modificar
 addi sp, sp -32 
@@ -116,8 +82,8 @@ sw s4, (16)sp
 
 li s1 0           #ac
 li s2 1           #it
-mv s3 a0          #me guardo el puntero
-mv s4 a1          #me guardo la longitud
+mv s3 t0          #me guardo el puntero
+mv s4 t1          #me guardo la longitud
 whileIA:
 bgt s2 s4 res     #sale del while si recorri todo el array
 lb a1 0(s3)       #guardo en a1 el valor del aray[puntero]

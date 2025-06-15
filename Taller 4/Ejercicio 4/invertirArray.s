@@ -1,46 +1,43 @@
+.data
+
+test1a: .word 3,4,5,6,10,2
+test1b: .word -3,-4,-5,-6,-10,-2
+long1: .word 0x6
+
+test2a: .word -3,-7,-12,-28,-17,-6,-1,0
+test2b: .word 3,7,12,28,17,6,1,0
+long2: .word 0x8
+
+.text
+
+
+
 main:
 #test1
-li a0 0x0fffff8c     #puntero
-li a1 10             #longitud
-li a2 1              #valor de inicio
-li a3 1              #iterador
-li a4 1              #variacion
-jal ra cargarArray
-
-li a0 0x0fffff8c     #puntero
-li a1 10             #longitud
+la a0 test1a
+lw a1 long1
 jal ra invertirArray
 
-li a0 0x0fffff8c     #puntero
-li a1 10             #longitud
-li a2 -1              #valor de inicio
-li a3 1              #iterador
-li a4 -1              #variacion
+la a0 test1a
+la a1 test1b
+lw a2 long1
+
 jal ra revisarArray
 li s1 1
 bne s1 a0 falla
-
 #test2
-
-li a0 0x0fffff8c     #puntero
-li a1 20             #longitud
-li a2 2              #valor de inicio
-li a3 1              #iterador
-li a4 2              #variacion
-jal ra cargarArray
-
-li a0 0x0fffff8c     #puntero
-li a1 20             #longitud
+la a0 test2a
+lw a1 long2
 jal ra invertirArray
 
-li a0 0x0fffff8c     #puntero
-li a1 20             #longitud
-li a2 -2              #valor de inicio
-li a3 1              #iterador
-li a4 -2              #variacion
+la a0 test2a
+la a1 test2b
+lw a2 long2
+
 jal ra revisarArray
 li s1 1
 bne s1 a0 falla
+
 li s2 1
 j fin
 
@@ -93,40 +90,7 @@ lw s3,(12)sp
 addi sp, sp 16 
 ret
 #---------------------------------------------
-cargarArray:
 
-#almaceno los valores que no quiero modificar
-addi sp, sp -32 
-sw ra, (0)sp
-sw s0, (4)sp
-sw s1, (8)sp
-sw s2, (12)sp
-sw s3, (16)sp
-sw s4, (20)sp
-
-mv s0 a0 #puntero
-mv s1 a1 #longitud
-mv s2 a2 #inicio
-mv s3 a3 #iterador
-mv s4 a4 #variacion
-
-whileCA:
-bgt s3 s1 finCA
-sw s2 0(s0)          #lo cargo en posicion
-add s2 s2 s4         #le sumo la variacion
-addi s0 s0 4         #actualizo el puntero
-addi s3 s3 1         #actualizo el iterador
-j whileCA
-finCA:
-lw ra, (0)sp
-lw s0, (4)sp
-lw s1, (8)sp
-lw s2, (12)sp
-lw s3, (16)sp
-lw s4, (20)sp
-addi sp, sp -32 
-ret
-#--------------------------------------------
 revisarArray:
 
 #almaceno los valores que no quiero modificar
@@ -139,20 +103,19 @@ sw s3, (16)sp
 sw s4, (20)sp
 sw s5, (24)sp
 
-mv s0 a0 #puntero
-mv s1 a1 #longitud
-mv s2 a2 #inicio
-mv s3 a3 #iterador
-mv s4 a4 #variacion
+mv s0 a0 #punteroInv
+mv s1 a1 #punteroNorm
+mv s2 a2 #long
+li s3 0
 
 whileRA:
-bgt s3 s1 noFallaRA
-lw s5 0(s0)          #lo cargo en posicion
-bne s5 s2 fallaRA    #si no es igual a lo esperado falla
+beq s3 s2 noFallaRA
+lw s4 0(s0)
+lw s5 0(s1)          #los cargo en posicion
+bne s5 s4 fallaRA    #si no es igual a lo esperado falla
 
-
-add s2 s2 s4         #le sumo la variacion
 addi s0 s0 4         #actualizo el puntero
+addi s1 s1 4         #actualizo el puntero
 addi s3 s3 1         #actualizo el iterador
 j whileRA
 
