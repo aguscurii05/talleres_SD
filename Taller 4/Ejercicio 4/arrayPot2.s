@@ -69,7 +69,7 @@ mv t2 a0          #t2
 
 whileIA:
 beq t1 a1 res     #sale del while si recorri todo el array
-lb a0 0(s3)       #guardo en a0 el valor del aray[puntero]
+lb a0 0(t2)       #guardo en a0 el valor del aray[puntero]
 jal ra esPot2     #chequeo si es potencia de 2
 addi t2 t2 1      #actualizo el puntero
 addi t1 t1 1      #actualizo el iterador
