@@ -11,21 +11,21 @@ long3: .word 7
 .text
 main:
 #test1
-la t0 test1
-lw t1 long1
+la a0 test1
+lw a1 long1
 jal ra potEnArr
 bnez a0 falla
 
 #test2
-la t0 test2
-lw t1 long2
+la a0 test2
+lw a1 long2
 jal ra potEnArr
 lw s1 long2
 bne s1 a0 falla
 
 #test3
-la t0 test3
-lw t1 long3
+la a0 test3
+lw a1 long3
 jal ra potEnArr
 li s1 2
 bne s1 a0 falla
@@ -40,7 +40,13 @@ fin: j fin
 
 #------------------------------------------
 
-esPot2: #tomo el num en a0
+esPot2: 
+
+#tomo el num en a1
+
+addi sp sp -16
+sw ra 0(sp)
+
 li t0 1 # cargo en t0 2^0
 
 whileP2:
@@ -59,27 +65,39 @@ li a0 1
 j finP2
 
 finP2:
+lw ra 0(sp)
+addi sp sp 16
 ret
 
 #--------------------------------------------
-potEnArr: #tomo a0=puntero, a1=long
-li t0 0           #ac
-li t1 0           #it
-mv t2 a0          #t2
+potEnArr: #tomo t0=puntero, t1=long
+
+#almaceno en el stack las posiciones que NO quiero modificar
+addi sp, sp -32 
+sw ra, (0)sp
+
+mv t0 a0
+li t1 0           #ac
+li t2 0           #it
 
 whileIA:
-beq t1 a1 res     #sale del while si recorri todo el array
-lb a0 0(t2)       #guardo en a0 el valor del aray[puntero]
+beq t2 a1 res     #sale del while si recorri todo el array
+lb a0 0(t0)       #guardo en a1 el valor del aray[puntero]
+sw t0 4(sp)
 jal ra esPot2     #chequeo si es potencia de 2
-addi t2 t2 1      #actualizo el puntero
-addi t1 t1 1      #actualizo el iterador
-addi t0 t0 a0     #le sumo el resultado de esPot2
+lw t0 4(sp)
+addi t0 t0 1      #actualizo el puntero
+addi t2 t2 1      #actualizo el iterador
+addi t1 t1 a0
 j whileIA
 
 res:
     
 #guardo los resultados en a0
-mv a0 t0
+mv a0 t1
 
+#actualizo ra y sp. Luego ret
+lw ra, (0)sp
+addi sp, sp, 32
 ret
 #--------------------------------------------
