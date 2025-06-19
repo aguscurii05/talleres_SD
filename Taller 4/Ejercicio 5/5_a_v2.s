@@ -28,8 +28,6 @@ noFunciona2:
 fin:
     j    fin
 
-
-# === factorial ===
 factorial:      
     addi sp, sp, -16
     sw   ra, 4(sp)
